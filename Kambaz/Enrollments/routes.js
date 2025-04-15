@@ -26,4 +26,3 @@ export default function EnrollmentRoutes(app) {
     res.send(enrollments);
   });
 }
-
