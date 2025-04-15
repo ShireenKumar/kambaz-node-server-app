@@ -6,6 +6,16 @@ export default function AssignmentRoutes(app) {
     res.send(assignments);
   });
 
+  app.get("/api/assignments/:assignmentId", (req, res) => {
+    const { assignmentId } = req.params;
+    const assignment = dao.findAssignmentById(assignmentId);
+    if (!assignment) {
+      res.status(404).send({ message: "Assignment not found" });
+    } else {
+      res.send(assignment);
+    }
+  });
+
   app.get("/api/courses/:courseId/assignments", (req, res) => {
     const { courseId } = req.params;
     const assignments = dao.findAssignmentsForCourse(courseId);
@@ -16,7 +26,7 @@ export default function AssignmentRoutes(app) {
     const { courseId } = req.params;
     const newAssignment = dao.createAssignment({
       ...req.body,
-      course: courseId
+      course: courseId,
     });
     res.send(newAssignment);
   });
@@ -25,7 +35,12 @@ export default function AssignmentRoutes(app) {
     const { assignmentId } = req.params;
     const assignmentUpdates = req.body;
     const updated = dao.updateAssignment(assignmentId, assignmentUpdates);
-    res.send(updated);
+
+    if (!updated) {
+      res.status(404).send({ message: "Assignment not found" });
+    } else {
+      res.send(updated);
+    }
   });
 
   app.delete("/api/assignments/:assignmentId", (req, res) => {
