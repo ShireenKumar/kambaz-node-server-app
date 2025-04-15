@@ -20,10 +20,12 @@ export function deleteCourse(courseId) {
   Database.enrollments = enrollments.filter(
     (enrollment) => enrollment.course !== courseId
 );}
-
 export function updateCourse(courseId, courseUpdates) {
   const { courses } = Database;
   const course = courses.find((course) => course._id === courseId);
+  if (!course) {
+    return null;
+  }
   Object.assign(course, courseUpdates);
   return course;
 }
