@@ -1,15 +1,18 @@
 import model from "./model.js";
-
+import { v4 as uuidv4 } from "uuid";
 // Find all modules for a course
 export function findModulesForCourse(courseId) {
   return model.find({ course: courseId });
 }
 
 // Create a module
-export async function createModule(module) {
-  const created = await model.create({ ...module });
-  return created;
-}
+export function createModule(module) {
+  const newModule = { ...module, _id: uuidv4() };
+  return model.create(newModule);
+  // Database.modules = [...Database.modules, newModule];
+  // return newModule;
+ }
+ 
 
 // Delete a module
 export function deleteModule(moduleId) {
