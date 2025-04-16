@@ -19,12 +19,21 @@ export function createCourse(course) {
   // Database.courses = [...Database.courses, newCourse];
   // return newCourse;
 }
-export function deleteCourse(courseId) {
-  const { courses, enrollments } = Database;
-  Database.courses = courses.filter((course) => course._id !== courseId);
+// export function deleteCourse(courseId) {
+//   const { courses, enrollments } = Database;
+//   Database.courses = courses.filter((course) => course._id !== courseId);
+//   Database.enrollments = enrollments.filter(
+//     (enrollment) => enrollment.course !== courseId
+// );}
+export async function deleteCourse(courseId) {
+  const result = await model.deleteOne({ _id: courseId });
+  const { enrollments } = Database;
   Database.enrollments = enrollments.filter(
     (enrollment) => enrollment.course !== courseId
-);}
+  );
+
+  return result;
+}
 export function updateCourse(courseId, courseUpdates) {
   const { courses } = Database;
   const course = courses.find((course) => course._id === courseId);
