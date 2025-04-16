@@ -29,7 +29,6 @@ export async function deleteCourse(courseId) {
   return result;
 }
 
-// ✅ FIXED: Returns updated course from MongoDB
 export function updateCourse(courseId, courseUpdates) {
   return model.findByIdAndUpdate(courseId, courseUpdates, { new: true });
 }
