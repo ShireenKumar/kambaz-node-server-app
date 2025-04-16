@@ -2,42 +2,34 @@ import * as dao from "./dao.js";
 import * as modulesDao from "../Modules/dao.js";
 
 export default function CourseRoutes(app) {
-
-
-  // app.post("/api/courses", (req, res) => {
-  //   const newCourse = dao.createCourse(req.body);
-  //   res.send(newCourse);
-  // });
   app.post("/api/courses", async (req, res) => {
     const course = await dao.createCourse(req.body);
     res.json(course);
   });
- 
 
   app.get("/api/courses", async (req, res) => {
     const courses = await dao.findAllCourses();
     res.send(courses);
   });
- 
 
   app.delete("/api/courses/:courseId", async (req, res) => {
     const { courseId } = req.params;
     const status = await dao.deleteCourse(courseId);
     res.send(status);
   });
- 
 
-  app.put("/api/courses/:courseId", (req, res) => {
+  // ✅ FIXED: Handles not-found and returns updated doc
+  app.put("/api/courses/:courseId", async (req, res) => {
     const { courseId } = req.params;
     const courseUpdates = req.body;
-    const updated = dao.updateCourse(courseId, courseUpdates);
+    const updated = await dao.updateCourse(courseId, courseUpdates);
+
     if (!updated) {
       res.status(404).send({ message: "Course not found" });
     } else {
       res.send(updated);
     }
   });
-  
 
   app.get("/api/courses/:courseId/modules", (req, res) => {
     const { courseId } = req.params;
