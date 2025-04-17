@@ -1,5 +1,31 @@
 import Database from "../Database/index.js";
 import { v4 as uuidv4 } from "uuid";
+import model from "./model.js";
+
+
+export function findAssignmentsForCourses(courseId) {
+  return model.find({ course: courseId });
+}
+
+export function createAssignments(assignment) {
+  return model.create({ ...assignment, _id: uuidv4() });
+}
+
+export function deleteAssignments(assignmentId) {
+  return model.deleteOne({ _id: assignmentId });
+}
+
+export function updateAssignments(assignmentId, updates) {
+  return model.updateOne({ _id: assignmentId }, { $set: updates });
+}
+
+export function findAssignmentByIds(aid) {
+  return model.findOne({ _id: aid });
+}
+
+
+
+
 
 export function findAllAssignments() {
   return Database.assignments;
@@ -18,7 +44,7 @@ export function findAssignmentsForCourse(courseId) {
 export function createAssignment(assignment) {
   const newAssignment = {
     ...assignment,
-    _id: uuidv4(), // always override
+    _id: uuidv4(), 
   };
   Database.assignments = [...Database.assignments, newAssignment];
   return newAssignment;
@@ -40,3 +66,4 @@ export function updateAssignment(assignmentId, assignmentUpdates) {
   Object.assign(assignment, assignmentUpdates);
   return assignment;
 }
+
